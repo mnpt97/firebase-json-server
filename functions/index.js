@@ -1,10 +1,11 @@
-const functions = require('firebase-functions');
+//const functions = require('firebase-functions');
 const pluralize = require('pluralize')
 const jsonServer = require('json-server')
 
 const main = jsonServer.create()
 const api = jsonServer.create()
-const router = jsonServer.router('db.json', { foreignKeySuffix: 'Id' })
+//const router = jsonServer.router('db.json', { foreignKeySuffix: 'Id' })
+const router = jsonServer.router(require('./db.js')(), {foreignKeySuffix : 'Id'});
 const middlewares = jsonServer.defaults()
 
 router.render = function (req, res) {
@@ -32,5 +33,8 @@ api.use(jsonServer.rewriter({
 api.use(router)
 
 main.use('/api', api)
+main.listen(3000, () => {
+  console.log('Server is running');
+})
 
-exports.main = functions.https.onRequest(main)
+//exports.main = functions.https.onRequest(main)
